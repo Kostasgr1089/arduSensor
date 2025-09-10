@@ -42,3 +42,13 @@ Create an admin user
 ```
 python manage.py createsuperuser
 ```
+
+4. Device Tokens
+
+Each device must have a DeviceToken in order to send temperature and humidity data.
+Create a device token
+
+```
+python manage.py createDeviceToken <device_id>
+```
+
