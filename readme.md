@@ -102,8 +102,10 @@ POST /api/sensor_data_post/ with Content-Type: application/x-www-form-urlencoded
 0. Prerequisite
 Create a DeviceToken
 
-```python manage.py createDeviceToken demo-esp
 ```
+python manage.py createDeviceToken demo-esp
+```
+
 → copy the printed token, e.g. 11111111-2222-3333-4444-555555555555
 
 2. Using curl (Linux/macOS)
