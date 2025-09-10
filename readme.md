@@ -64,13 +64,7 @@ arduSensor/
 ├── SETUP.md           # detailed setup guide
 └── arduinoSetup.md    # ESP firmware setup guide
 ---
-
-## Export API Usage Instructions
-
-### 1. Obtain an API Token
-
-
-* Generate a Token for your user account:
+```
 
 ```bash
 python manage.py createUserToken <username>
