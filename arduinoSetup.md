@@ -1,7 +1,7 @@
 # Arduino / ESP Firmware Setup
 
 This firmware reads temperature and humidity from a **DHT20** sensor and sends it to the ArduSensor backend over Wi-Fi.  
-It can be adapted for ESP8266 or ESP32 boards, but this project uses an **ESP8266 (NodeMCU/Wemos D1 mini)**.
+It can be adapted for ESP8266, ESP32 or other development boards, this project uses an **ESP8266**.
 
 ---
 
