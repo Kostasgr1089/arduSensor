@@ -62,15 +62,73 @@ arduSensor/
 ├── requirements.txt
 ├── example_data.json  # demo dataset
 ├── SETUP.md           # detailed setup guide
-└── arduinoSetup.md    # ESP firmware setup guide
+└── arduinoSetup.md    # Arduno / ESP setup guide
 ---
 ```
 
-```bash
-python manage.py createUserToken <username>
+---
+
+### 1. Access Web Page ui
+
+1. Start the server.
+
+```python manage.py runserver```
+Local access: http://127.0.0.1:8000
+By default, it will start at:
+Local access: http://127.0.0.1:8000 or http://localhost:8000
+
+Network access: http://<server-ip>:8000
+ (replace <server-ip> with your machine’s IP if you want to connect from another device on the same network).
+2. Login with your superuser or user credentials
+
+For admin-level management visit:
+
+http://<server-ip>:8000/admin/
+
+Once logged in, you can:
+1. Access the dashboard with the realtime sensor readings.
+2. Access the history tab to view the readings stored in the database.
+3. Manage alert thresholds through the settings tab.
+4. Export data through the settings tab.
+   
+---
+
+### 2. Post Data Without a Device (CLI)
+
+You can simulate the ESP by sending an HTTP POST to the same endpoint your microcontroller uses:
+
+POST /api/sensor_data_post/ with Content-Type: application/x-www-form-urlencoded and a DeviceToken in the Authorization header.
+
+0. Prerequisite — Create a DeviceToken
+```python manage.py createDeviceToken demo-esp```
+# → copy the printed token, e.g. 11111111-2222-3333-4444-555555555555
+
+1. Using curl (Linux/macOS)
+```
+curl -X POST "http://<server-ip>:8000/api/sensor_data_post/" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -H "Authorization: 11111111-2222-3333-4444-555555555555" \
+  --data "temperature=24.5&humidity=53.2&device_id=demo-esp"
 ```
 
-### 2. Export Sensor Data (JSON)
+2. Using curl (Windows PowerShell)
+
+```
+curl.exe -X POST "http://<server-ip>:8000/api/sensor_data_post/" `
+  -H "Content-Type: application/x-www-form-urlencoded" `
+  -H "Authorization: 11111111-2222-3333-4444-555555555555" `
+  --data "temperature=24.5&humidity=53.2&device_id=demo-esp"
+```
+
+3. Using Postman
+   1. Method: POST
+   2. URL: http://<server-ip>:8000/api/sensor_data_post/
+   3. Headers: Authorization: 11111111-2222-3333-4444-555555555555 Content-Type: application/x-www-form-urlencoded
+   4. Body: temperature=24.5&humidity=53.2&device_id=demo-esp
+  
+---
+
+### 3. Export Sensor Data (JSON)
 
 * URL: `http://localhost:8000/api/export-data-json/`
 * Method: `GET`
