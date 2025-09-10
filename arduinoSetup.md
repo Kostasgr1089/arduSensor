@@ -78,4 +78,5 @@ temperature=24.10&humidity=52.40&device_id=ESP8266
 
 1. No WiFi connection: Check SSID/Password.
 2. Failed to read data from sensor: Check SDA/SCL wiring.
-3. HTTP errors: Verify serverUrl and authToken. 
+3. HTTP errors: Verify serverUrl and authToken.
+4. Data not accepted by backend: Launch server with ``` python manage.py runserver 0.0.0.0:8000```
