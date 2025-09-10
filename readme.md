@@ -6,7 +6,7 @@ Welcome to the **ArduSensor** project! This Django-based system is designed for 
 
 👉 For full installation and configuration instructions, see [SETUP.md](SETUP.md).  
 👉 For microcontroller setup, see [arduinoSetup.md](arduinoSetup.md).  
-👉 For loading demo data, see [SETUP.md – Using Example Data](SETUP.md#5-using-example-data).
+👉 For loading demo data, see [SETUP.md – Using Example Data](SETUP.md##5-using-example-data).
 
 
 ## 🔍 Project Overview
