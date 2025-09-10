@@ -24,7 +24,7 @@ pip install -r requirements.txt
 ```
 
 
-3. Database Setup
+## 3. Database Setup
    
 Create the database
 
@@ -43,9 +43,10 @@ Create an admin user
 python manage.py createsuperuser
 ```
 
-4. Device Tokens
+## 4. Device Tokens
 
 Each device must have a DeviceToken in order to send temperature and humidity data.
+
 Create a device token
 
 ```
