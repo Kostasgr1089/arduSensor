@@ -35,7 +35,10 @@ GRANT ALL PRIVILEGES ON DATABASE ardu_sensor TO postgres;
 
 ```
 Apply migrations
+```
 python manage.py migrate
-
+```
 Create an admin user
+```
 python manage.py createsuperuser
+```
