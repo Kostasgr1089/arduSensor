@@ -25,11 +25,15 @@ pip install -r requirements.txt
 
 
 3. Database Setup
+   
 Create the database
+
+```sql
 CREATE DATABASE ardu_sensor;
 CREATE USER postgres WITH PASSWORD 'postgres';
 GRANT ALL PRIVILEGES ON DATABASE ardu_sensor TO postgres;
 
+```
 Apply migrations
 python manage.py migrate
 
