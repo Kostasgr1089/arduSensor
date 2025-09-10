@@ -35,7 +35,21 @@ CREATE USER postgres WITH PASSWORD 'postgres';
 GRANT ALL PRIVILEGES ON DATABASE ardu_sensor TO postgres;
 
 ```
+
+Edit your Django settings (e.g. settings.py or .env) and set the connection:
+
+```python
+
+DB_NAME=ardu_sensor
+DB_USER=postgres
+DB_PASSWORD=your_postgres_password
+DB_HOST=127.0.0.1
+DB_PORT=5432
+
+```
+
 Apply migrations
+
 ```
 python manage.py migrate
 ```
