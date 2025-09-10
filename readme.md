@@ -6,10 +6,9 @@ This is my undergraduate **thesis project** at **Harokopio University of Athens 
 ArduSensor is a condition monitoring system for a Data Center using Python/Django and microcontrollers. Providing a user-friendly UI, the ability to monitor data, view data historically, set thresholds for email alerts and export stored data on JSON and CSV files
 
 
-![ArduSensor Logo](/logo.png)
 
 <p align="center">
-  <img src="assets/logo.png" alt="ArduSensor Logo" width="200"/>
+  <img src="/logo.png" alt="ArduSensor Logo" width="200"/>
 </p>
 
 ---
