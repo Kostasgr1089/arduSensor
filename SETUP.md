@@ -102,3 +102,42 @@ To load the data, run:
 python manage.py loaddata example_data.json
 ```
 
+---
+
+## 6. Gmail Alerts
+
+The system can send email alerts via Gmail using OAuth2 authentication.
+To enable this, you must configure a Google Cloud Console project and provide credentials to the application.
+
+Configure Sender Email
+
+Open `gmail_service.py` and update the following line:
+
+```python
+SENDER_EMAIL = "your_email@gmail.com"  # Replace with your Gmail address
+```
+
+Create a Google Cloud Console App
+
+1. Go to Google Cloud Console.
+2. Create a new project (or select an existing one).
+3. Navigate to APIs & Services → Credentials.
+4. Click Create Credentials → OAuth Client ID.
+5. Application type: Web application
+6. Add http://localhost in Authorized redirect URIs
+7. Download the resulting file → rename it to credentials.json.
+8. Place it into the credentials folder
+
+Run the provided script to authorize your gmail account
+
+```
+python get_token.py
+```
+
+A browser window will open asking you to log in and grant access.
+
+After granting access, a token.json file will be created inside the credentials/ folder.
+
+---
+
+
