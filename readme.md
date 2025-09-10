@@ -63,7 +63,7 @@ arduSensor/
 ├── example_data.json  # demo dataset
 ├── SETUP.md           # detailed setup guide
 └── arduinoSetup.md    # Arduno / ESP setup guide
----
+
 ```
 
 ---
@@ -100,8 +100,7 @@ You can simulate the ESP by sending an HTTP POST to the same endpoint your micro
 POST /api/sensor_data_post/ with Content-Type: application/x-www-form-urlencoded and a DeviceToken in the Authorization header.
 
 0. Prerequisite — Create a DeviceToken
-```python manage.py createDeviceToken demo-esp```
-# → copy the printed token, e.g. 11111111-2222-3333-4444-555555555555
+```python manage.py createDeviceToken demo-esp```  → copy the printed token, e.g. 11111111-2222-3333-4444-555555555555
 
 1. Using curl (Linux/macOS)
 ```
