@@ -63,7 +63,7 @@ python manage.py createDeviceToken <device_id>
 
 You must use the same device_id as well as copy the token from the terminal window onto your arduino code 
 
-```
+```c#
 String device_id = "ESP8266";   // or another identifier
 const char* authToken = "<your-token>";   // token
 ```
