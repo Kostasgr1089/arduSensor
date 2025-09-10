@@ -4,7 +4,9 @@ Welcome to the **ArduSensor** project! This Django-based system is designed for 
 
 ---
 
-👉 For full installation and configuration instructions, see [SETUP.md](SETUP.md).
+👉 For full installation and configuration instructions, see [SETUP.md](SETUP.md).  
+👉 For microcontroller setup, see [arduinoSetup.md](arduinoSetup.md).  
+👉 For loading demo data, see [SETUP.md – Using Example Data](SETUP.md#6-using-example-data).
 
 
 ## 🔍 Project Overview
@@ -98,15 +100,6 @@ curl -H "Authorization: Token your_token_here" "http://localhost:8000/api/export
 
 * Login at: `http://localhost:8000/accounts/login/`
 * Manage thresholds, view sensor data history, export data manually.
-
----
-
-## 📅 Planned Improvements
-
-* Full HTTPS local development support
-* Automatic device token management endpoints
-* API documentation with ReDoc or Swagger
-* Scheduled automatic exports
 
 ---
 
