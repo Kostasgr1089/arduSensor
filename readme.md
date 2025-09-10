@@ -68,7 +68,7 @@ arduSensor/
 
 ---
 
-### 1. Access Web Page ui
+### 1. Access Web Page UI
 
 1. Start the server.
 
@@ -99,10 +99,12 @@ You can simulate the ESP by sending an HTTP POST to the same endpoint your micro
 
 POST /api/sensor_data_post/ with Content-Type: application/x-www-form-urlencoded and a DeviceToken in the Authorization header.
 
-0. Prerequisite — Create a DeviceToken
-```python manage.py createDeviceToken demo-esp```  → copy the printed token, e.g. 11111111-2222-3333-4444-555555555555
+0. Prerequisite
+Create a DeviceToken
+```python manage.py createDeviceToken demo-esp```
+→ copy the printed token, e.g. 11111111-2222-3333-4444-555555555555
 
-1. Using curl (Linux/macOS)
+2. Using curl (Linux/macOS)
 ```
 curl -X POST "http://<server-ip>:8000/api/sensor_data_post/" \
   -H "Content-Type: application/x-www-form-urlencoded" \
