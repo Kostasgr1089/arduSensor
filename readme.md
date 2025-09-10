@@ -100,6 +100,7 @@ You can simulate the ESP by sending an HTTP POST to the same endpoint your micro
 POST /api/sensor_data_post/ with Content-Type: application/x-www-form-urlencoded and a DeviceToken in the Authorization header.
 
 0. Prerequisite
+   
 Create a DeviceToken
 
 ```
