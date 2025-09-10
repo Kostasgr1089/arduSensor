@@ -154,12 +154,6 @@ curl -H "Authorization: Token your_token_here" "http://localhost:8000/api/export
 
 ---
 
-## Web Dashboard Access
-
-* Login at: `http://localhost:8000/accounts/login/`
-* Manage thresholds, view sensor data history, export data manually.
-
----
 
 ## Demo Dataset
 
