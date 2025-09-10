@@ -85,6 +85,7 @@ Local access: http://127.0.0.1:8000 or http://localhost:8000
 
 Network access: http://<server-ip>:8000
  (replace <server-ip> with your machine’s IP if you want to connect from another device on the same network).
+ 
 2. Login with your superuser or user credentials
 
 For admin-level management visit:
