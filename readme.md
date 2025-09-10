@@ -174,6 +174,7 @@ See SETUP.md – Using Example Data
 Project developed by: Konstantinos Gerokostas
 
 Institution: Harokopio University of Athens, Department of Informatics and Telematics
+
 Special Thanks: Django, Django REST Framework, and the open-source community.
 
 This repository contains the full source code of my undergraduate thesis project.
