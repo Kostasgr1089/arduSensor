@@ -8,7 +8,7 @@ ArduSensor is a condition monitoring system for a Data Center using Python/Djang
 
 
 <p align="center">
-  <img src="/logo.png" alt="ArduSensor Logo" width="200"/>
+  <img src="/logo.png" alt="ArduSensor Logo" width="400"/>
 </p>
 
 ---
