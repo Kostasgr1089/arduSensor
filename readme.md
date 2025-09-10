@@ -1,6 +1,9 @@
 # 🌐 ArduSensor Monitoring System
 
-Welcome to the **ArduSensor** project! This Django-based system is designed for monitoring IoT sensor data securely and flexibly, with both a user-friendly web interface and a professional REST API.
+Welcome to the **ArduSensor** project!  
+This is my undergraduate **thesis project** at **Harokopio University of Athens (Department of Informatics and Telematics)**.  
+
+ArduSensor is a condition monitoring system for a Data Center using Python/Django and microcontrollers. Providing a user-friendly UI, the ability to monitor data, view data historically, set thresholds for email alerts and export stored data on JSON and CSV files
 
 ---
 
@@ -28,8 +31,8 @@ Welcome to the **ArduSensor** project! This Django-based system is designed for 
 | :------------------------------- | :-------------------------------------------- | :----------------------------------------- |
 | Web Pages (settings, dashboard)  | `@login_required` (Django session)            | Browser-based access only.                 |
 | API Endpoints (JSON, CSV Export) | Token Authentication + Session Authentication | API clients and logged-in users supported. |
-
-* IoT devices authenticate using a custom **DeviceToken** system.
+| IoT Devices                      | Custom DeviceToken system                     | Token tied to each device ID.              |
+  
 * API clients authenticate using Django REST Framework **User Tokens**.
 
 ---
@@ -46,31 +49,28 @@ Welcome to the **ArduSensor** project! This Django-based system is designed for 
 ## 📂 Folder Structure
 
 ```bash
-myproject/
+arduSensor/
 ├── manage.py
-├── myproject/ (core project settings)
-└── myapi/ (main app)
-    ├── views.py
-    ├── models.py
-    ├── serializers.py
-    ├── forms.py
-    ├── templates/
-    └── management/commands/ (custom shell scripts)
-```
-
+├── arduSensor/        # core project settings
+├── arduSensorAPI/     # main app (models, views, serializers, commands)
+│   ├── views.py
+│   ├── models.py
+│   ├── serializers.py
+│   ├── forms.py
+│   ├── templates/
+│   └── management/commands/   # custom shell commands
+├── requirements.txt
+├── example_data.json  # demo dataset
+├── SETUP.md           # detailed setup guide
+└── arduinoSetup.md    # ESP firmware setup guide
 ---
 
-## 📊 API Usage Instructions
+## Export API Usage Instructions
 
 ### 1. Obtain an API Token
 
-* Create a Django user:
 
-```bash
-python manage.py createsuperuser
-```
-
-* Generate a Token for the user:
+* Generate a Token for your user account:
 
 ```bash
 python manage.py createUserToken <username>
@@ -96,20 +96,26 @@ curl -H "Authorization: Token your_token_here" "http://localhost:8000/api/export
 
 ---
 
-## 📃 Web Dashboard Access
+## Web Dashboard Access
 
 * Login at: `http://localhost:8000/accounts/login/`
 * Manage thresholds, view sensor data history, export data manually.
 
 ---
 
-## 💪 Credits
+## Demo Dataset
 
-**Project developed by**: K. Gerokostas
-
-**Special Thanks**: Everyone contributing to Django, Django REST Framework, and the open-source community.
-
+A demo dataset (example_data.json) is included for testing.
+See SETUP.md – Using Example Data
+ for instructions on how to load it.
+ 
 ---
 
-# 🚀 Let's monitor smart, let's monitor safe!
+## Credits
 
+Project developed by: Konstantinos Gerokostas
+
+Institution: Harokopio University of Athens, Department of Informatics and Telematics
+Special Thanks: Django, Django REST Framework, and the open-source community.
+
+This repository contains the full source code of my undergraduate thesis project.
