@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Set Thresholds</h2>
+
+    <!-- Collapsible Card for Threshold Form -->
+    <div class="accordion" id="settingsAccordion">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingForm">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseForm" aria-expanded="true" aria-controls="collapseForm">
+                    Add Thresholds
+                </button>
+            </h2>
+            <div id="collapseForm" class="accordion-collapse collapse show" aria-labelledby="headingForm" data-bs-parent="#settingsAccordion">
+                <div class="accordion-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="device-select" class="form-label">Select Device</label>
+                            <select name="device_id" id="device-select" class="form-select">
+                                <option value="">All Devices</option>  <!-- Global option -->
+                                {% for device_id in device_ids %}
+                                    <option value="{{ device_id }}">{{ device_id }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary">Save Threshold</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Existing Thresholds Table -->
+<h3 class="mt-5">Saved Thresholds</h3>
+<div class="table-responsive">
+    <table class="table table-bordered mt-3">
+        <thead class="{% if request.COOKIES.darkMode == 'enabled' %}table-dark-mode{% else %}table-light-mode{% endif %}">
+            <tr>
+                <th>Email</th>
+                <th>Device ID</th>
+                <th>Min Temp</th>
+                <th>Max Temp</th>
+                <th>Min Humidity</th>
+                <th>Max Humidity</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for threshold in existing_thresholds %}
+                <tr>
+                    <td>{{ threshold.email }}</td>
+                    <td>{{ threshold.device_id|default:"All Devices" }}</td>
+                    <td>{{ threshold.min_temperature }}</td>
+                    <td>{{ threshold.max_temperature }}</td>
+                    <td>{{ threshold.min_humidity }}</td>
+                    <td>{{ threshold.max_humidity }}</td>
+                    <td>
+                        <form method="POST" action="{% url 'delete_threshold' threshold.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- New Export Form -->
+<h2 class="mt-5">Export Sensor Data</h2>
+<div class="accordion" id="exportAccordion">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingExport">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExport" aria-expanded="false" aria-controls="collapseExport">
+                Export Options
+            </button>
+        </h2>
+        <div id="collapseExport" class="accordion-collapse collapse" aria-labelledby="headingExport" data-bs-parent="#exportAccordion">
+            <div class="accordion-body">
+                <form method="get" action="{% url 'export_sensor_data_csv' %}" id="export-form">
+                    <div class="mb-3">
+                        <label for="deviceExportSelect" class="form-label">Select Device</label>
+                        <select name="device_id" id="deviceExportSelect" class="form-select">
+                            <option value="all">All Devices</option>
+                            {% for device_id in device_ids %}
+                                <option value="{{ device_id }}">{{ device_id }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="intervalExportSelect" class="form-label">Select Time Interval</label>
+                        <select name="interval" id="intervalExportSelect" class="form-select">
+                            <option value="1d">Last Day</option>
+                            <option value="1w">Last Week</option>
+                            <option value="1m">Last Month</option>
+                            <option value="1y">Last Year</option>
+                            <option value="all">All Time</option>
+                        </select>
+                    </div>
+
+                    <div class="d-flex gap-3">
+                        <button type="submit" class="btn btn-success">Download CSV</button>
+                        <button type="button" class="btn btn-info" id="download-json">Download JSON</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('download-json').addEventListener('click', function() {
+    const device = document.getElementById('deviceExportSelect').value;
+    const interval = document.getElementById('intervalExportSelect').value;
+    const url = "{% url 'export_sensor_data_json' %}" + "?device_id=" + device + "&interval=" + interval;
+    window.location.href = url;
+});
+</script>
+
+
+
+<!-- Custom CSS -->
+<style>
+    .table-dark-mode {
+        background-color: #444;
+        color: #fff;
+    }
+
+    .table-light-mode {
+        background-color: #f8f9fa;
+        color: #000;
+    }
+</style>
+
+</div>
+
+<!-- Custom CSS for Dark Mode Compatibility -->
+<style>
+    body.dark-mode {
+        color: #fff;
+        background-color: #121212;
+    }
+
+    body.light-mode {
+        color: #000;
+        background-color: #fff;
+    }
+
+    body.dark-mode .table thead {
+        background-color: #333;
+        color: #fff;
+    }
+
+    body.dark-mode .table tbody tr {
+        background-color: #222;
+        color: #fff;
+    }
+
+    body.dark-mode .table tbody td {
+        color: #fff;
+    }
+
+    body.dark-mode .accordion-item {
+        background-color: #222;
+        color: #fff;
+        border-color: #444;
+    }
+
+    body.dark-mode .accordion-button {
+        background-color: #333;
+        color: #fff;
+        border-color: #444;
+    }
+
+    body.dark-mode .accordion-button:not(.collapsed) {
+        background-color: #444;
+        color: #fff;
+    }
+
+    body.dark-mode .form-select,
+    body.dark-mode input[type="text"],
+    body.dark-mode input[type="number"],
+    body.dark-mode input[type="email"],
+    body.dark-mode button {
+        background-color: #333;
+        color: #fff;
+        border-color: #444;
+    }
+
+    body.dark-mode .form-select option {
+        background-color: #333;
+        color: #fff;
+    }
+
+    body.light-mode .form-select,
+    body.light-mode input[type="text"],
+    body.light-mode input[type="number"],
+    body.light-mode input[type="email"],
+    body.light-mode button {
+        background-color: #fff;
+        color: #000;
+        border-color: #ccc;
+    }
+
+    body.light-mode .form-select option {
+        background-color: #fff;
+        color: #000;
+    }
+
+    /* Buttons */
+    body.dark-mode button.btn-primary {
+        background-color: #444;
+        color: #fff;
+        border-color: #555;
+    }
+
+    body.dark-mode button.btn-primary:hover {
+        background-color: #555;
+        border-color: #666;
+    }
+
+    body.light-mode button.btn-primary {
+        background-color: #007bff;
+        color: #fff;
+        border-color: #0056b3;
+    }
+
+    body.light-mode button.btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #003f7f;
+    }
+</style>
+{% endblock %}

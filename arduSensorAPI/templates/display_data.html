@@ -1,0 +1,265 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensor Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Sensor Data Dashboard</h1>
+    
+        <!-- Device Selection -->
+        <form id="device-form">
+            <label for="device-select" class="form-label">Select Device:</label>
+            <select name="device" id="device-select" class="form-select w-auto d-inline">
+                <option value="all">All Devices</option>
+                {% for device_id in device_ids %}
+                    <option value="{{ device_id }}">{{ device_id }}</option>
+                {% endfor %}
+            </select>
+        </form>
+    
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <h2>Temperature</h2>
+                <canvas id="temperatureChart"></canvas>
+            </div>
+            <div class="col-md-6">
+                <h2>Humidity</h2>
+                <canvas id="humidityChart"></canvas>
+            </div>
+        </div>
+    
+        <div id="no-data-message" class="alert alert-warning mt-3" style="display: none;">
+            No recent data available for the selected device.
+        </div>
+    </div>
+    
+
+    <script>
+        let temperatureChart, humidityChart;
+
+        function fetchData() {
+    const url = '/api/display-data/';
+
+    fetch(url, {
+        headers: { 'x-requested-with': 'XMLHttpRequest' }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Fetched Data:', data);
+
+        if (data.length === 0) {
+            document.getElementById('no-data-message').style.display = 'block';
+            document.getElementById('temperatureChart').parentElement.style.display = 'none';
+            document.getElementById('humidityChart').parentElement.style.display = 'none';
+            return;
+        }
+
+        document.getElementById('no-data-message').style.display = 'none';
+        document.getElementById('temperatureChart').parentElement.style.display = 'block';
+        document.getElementById('humidityChart').parentElement.style.display = 'block';
+
+        // Format timestamps as dd/mm/yy hh:mm:ss
+        const timestamps = data.map(entry => {
+            const date = new Date(entry.created_at);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+            const year = String(date.getFullYear()).slice(-2); // Last 2 digits of the year
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+            return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+        });
+
+        const temperatureData = data.map(entry => entry.temperature);
+        const humidityData = data.map(entry => entry.humidity);
+
+        updateCharts(timestamps, temperatureData, humidityData);
+    })
+    .catch(error => console.error('Error fetching data:', error));
+}
+function fetchData() {
+    const selectedDevice = document.getElementById('device-select').value;
+    const url = selectedDevice === 'all'
+        ? '/api/display-data/'  // Fetch all devices
+        : `/api/display-data/?device=${selectedDevice}`;  // Fetch specific device
+
+    fetch(url, {
+        headers: { 'x-requested-with': 'XMLHttpRequest' }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Fetched Data:', data);
+
+        if (data.length === 0) {
+            document.getElementById('no-data-message').style.display = 'block';
+            document.getElementById('temperatureChart').parentElement.style.display = 'none';
+            document.getElementById('humidityChart').parentElement.style.display = 'none';
+            return;
+        }
+
+        document.getElementById('no-data-message').style.display = 'none';
+        document.getElementById('temperatureChart').parentElement.style.display = 'block';
+        document.getElementById('humidityChart').parentElement.style.display = 'block';
+
+        // Create arrays for timestamps, temperature, and humidity
+        const timestamps = [];
+        const temperatureData = [];
+        const humidityData = [];
+
+        data.forEach(entry => {
+            const date = new Date(entry.created_at);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = String(date.getFullYear()).slice(-2);
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+
+            const formattedTimestamp = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+            timestamps.push(formattedTimestamp);
+
+            temperatureData.push({ x: formattedTimestamp, y: entry.temperature, device: entry.device_id });
+            humidityData.push({ x: formattedTimestamp, y: entry.humidity, device: entry.device_id });
+        });
+
+        // Reverse the arrays to display the oldest data on the left and the newest on the right
+        timestamps.reverse();
+        temperatureData.reverse();
+        humidityData.reverse();
+
+        updateCharts(temperatureData, humidityData);
+    })
+    .catch(error => console.error('Error fetching data:', error));
+}
+
+
+document.getElementById('device-select').addEventListener('change', fetchData);
+
+
+function updateCharts(temperatureData, humidityData) {
+    const temperatureCtx = document.getElementById('temperatureChart').getContext('2d');
+    const humidityCtx = document.getElementById('humidityChart').getContext('2d');
+
+    // Destroy previous charts if they exist
+    if (temperatureChart) {
+        temperatureChart.destroy();
+    }
+
+    if (humidityChart) {
+        humidityChart.destroy();
+    }
+
+    // Create Temperature Chart
+    temperatureChart = new Chart(temperatureCtx, {
+        type: 'line',
+        data: {
+            labels: temperatureData.map(dataPoint => dataPoint.x), // Use the 'x' property for labels
+            datasets: [{
+                label: 'Temperature (°C)',
+                data: temperatureData.map(dataPoint => dataPoint.y), // Use the 'y' property for values
+                borderColor: 'rgba(255, 99, 132, 1)',
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const dataIndex = context.dataIndex;
+                            const deviceId = temperatureData[dataIndex].device; // Access the device ID
+                            return `Temperature: ${context.raw}°C (Device: ${deviceId})`;
+                        }
+                    }
+                },
+                legend: {
+                    display: true,
+                    position: 'top'
+                }
+            },
+            scales: {
+                x: {
+                    type: 'category',
+                    title: {
+                        display: true,
+                        text: 'Time'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Temperature (°C)'
+                    }
+                }
+            }
+        }
+    });
+
+    // Create Humidity Chart
+    humidityChart = new Chart(humidityCtx, {
+        type: 'line',
+        data: {
+            labels: humidityData.map(dataPoint => dataPoint.x), // Use the 'x' property for labels
+            datasets: [{
+                label: 'Humidity (%)',
+                data: humidityData.map(dataPoint => dataPoint.y), // Use the 'y' property for values
+                borderColor: 'rgba(54, 162, 235, 1)',
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const dataIndex = context.dataIndex;
+                            const deviceId = humidityData[dataIndex].device; // Access the device ID
+                            return `Humidity: ${context.raw}% (Device: ${deviceId})`;
+                        }
+                    }
+                },
+                legend: {
+                    display: true,
+                    position: 'top'
+                }
+            },
+            scales: {
+                x: {
+                    type: 'category',
+                    title: {
+                        display: true,
+                        text: 'Time'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Humidity (%)'
+                    }
+                }
+            }
+        }
+    });
+}
+
+
+        // Initial data fetch on page load
+        fetchData();
+        setInterval(fetchData, 30000);  // Update every 30s
+    </script>
+</body>
+</html>
+{% endblock %}
