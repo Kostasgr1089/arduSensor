@@ -1,6 +1,6 @@
 # ArduSensor – Setup Guide
 
-This guide explains how to install, configure, and run the **ArduSensor** project, including the backend (Django + PostgreSQL), the ESP firmware, Gmail alerts, and exporting data with external apps.
+This guide explains how to install, configure, and run the **ArduSensor** project, including the backend (Django + PostgreSQL), the development board token, Gmail alerts.
 
 ---
 
@@ -23,6 +23,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+---
 
 ## 3. Database Setup
    
@@ -51,6 +52,8 @@ Email address
 
 Password
 
+---
+
 ## 4. Device Tokens
 
 Each device must have a DeviceToken in order to send temperature and humidity data.
@@ -70,3 +73,4 @@ const char* authToken = "<your-token>";   // token
 
 You can also manipulate deviceTokens straight from the Admin panel in localhost:8000/Admin
 
+👉 For the full development board setup (Configuration, libraries, wiring, and uploading), see [arduinoSetup.md](arduinoSetup.md).
