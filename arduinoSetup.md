@@ -56,3 +56,26 @@ const char* serverUrl = "http://<server-ip>:8000/api/sensor_data_post/";
 const char* authToken = "<device-token>";
 
 ```
+
+---
+
+# 6. Upload and Run
+
+1. Tools → board → Select your development board (e.g., NodeMCU 1.0).
+2. Tools → Port → Select the correct COM port.
+3. Click Upload.
+4. Open Serial Monitor at 115200 baud to see log.
+
+Every ~30 seconds you should see POST requests like:
+
+```ini
+temperature=24.10&humidity=52.40&device_id=ESP8266
+```
+
+---
+
+# 7. Troubleshooting
+
+1. No WiFi connection: Check SSID/Password.
+2. Failed to read data from sensor: Check SDA/SCL wiring.
+3. HTTP errors: Verify serverUrl and authToken. 
