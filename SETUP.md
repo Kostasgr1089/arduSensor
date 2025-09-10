@@ -77,7 +77,7 @@ You can also manipulate deviceTokens straight from the Admin panel in localhost:
 
 ---
 
-# 5. Using sample data
+## 5. Using sample data
 
 This project includes a sample dataset (`example_data.json`) containing sensor readings.  
 It is provided so you can quickly test the application without having to connect a physical device or generate your own data.
