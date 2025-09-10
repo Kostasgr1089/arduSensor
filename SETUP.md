@@ -74,3 +74,17 @@ const char* authToken = "<your-token>";   // token
 You can also manipulate deviceTokens straight from the Admin panel in localhost:8000/Admin
 
 👉 For the full development board setup (Configuration, libraries, wiring, and uploading), see [arduinoSetup.md](arduinoSetup.md).
+
+---
+
+# 5. Using sample data
+
+This project includes a sample dataset (`example_data.json`) containing sensor readings.  
+It is provided so you can quickly test the application without having to connect a physical device or generate your own data.
+
+To load the data, run:
+
+```bash
+python manage.py loaddata example_data.json
+```
+
