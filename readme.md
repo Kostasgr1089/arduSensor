@@ -4,6 +4,9 @@ Welcome to the **ArduSensor** project! This Django-based system is designed for 
 
 ---
 
+👉 For full installation and configuration instructions, see [SETUP.md](SETUP.md).
+
+
 ## 🔍 Project Overview
 
 **Features:**
