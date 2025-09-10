@@ -49,8 +49,10 @@ Edit the sketch and set:
 ```cpp
 const char* ssid = "YourWiFiSSID";
 const char* password = "YourWiFiPassword";
-```
+
 
 String device_id = "ESP8266";
 const char* serverUrl = "http://<server-ip>:8000/api/sensor_data_post/";
 const char* authToken = "<device-token>";
+
+```
