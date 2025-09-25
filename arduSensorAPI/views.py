@@ -38,8 +38,11 @@ def base(request):
 
 
 # Enhanced View for handling sensor data via API
-@method_decorator(login_required, name='dispatch')
+
 class SensorDataView(views.APIView):
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, *args, **kwargs):
         # Fetch data from the last 5 minutes (or specify another timeframe)
         since_time = now() - timedelta(minutes=5)
