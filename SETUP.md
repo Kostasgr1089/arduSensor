@@ -1,0 +1,143 @@
+# ArduSensor – Setup Guide
+
+This guide explains how to install, configure, and run the **ArduSensor** project, including the backend (Django + PostgreSQL), the development board token, Gmail alerts.
+
+---
+
+## 1. Requirements
+
+- Python 3.10+
+- PostgreSQL 14+
+- Git
+- Arduino IDE 
+
+---
+
+## 2. Clone and Environment Setup
+
+```bash
+git clone https://github.com/<your-username>/arduSensor.git
+cd arduSensor
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+---
+
+## 3. Database Setup
+   
+Create the database
+
+```sql
+CREATE DATABASE ardu_sensor;
+CREATE USER postgres WITH PASSWORD 'postgres';
+GRANT ALL PRIVILEGES ON DATABASE ardu_sensor TO postgres;
+
+```
+
+Edit your Django settings (e.g. settings.py or .env) and set the connection:
+
+```python
+
+DB_NAME=ardu_sensor
+DB_USER=postgres
+DB_PASSWORD=your_postgres_password
+DB_HOST=127.0.0.1
+DB_PORT=5432
+
+```
+
+Apply migrations
+
+```
+python manage.py migrate
+```
+Create an admin user
+```
+python manage.py createsuperuser
+```
+
+You will be prompted to enter:
+
+Username
+
+Email address
+
+Password
+
+---
+
+## 4. Device Tokens
+
+Each device must have a DeviceToken in order to send temperature and humidity data.
+
+Create a device token
+
+```
+python manage.py createDeviceToken <device_id>
+```
+
+You must use the same device_id as well as copy the token from the terminal window onto your arduino code 
+
+```c#
+String device_id = "ESP8266";   // or another identifier
+const char* authToken = "<your-token>";   // token
+```
+
+You can also manipulate deviceTokens straight from the Admin panel in localhost:8000/Admin
+
+👉 For the full development board setup (Configuration, libraries, wiring, and uploading), see [arduinoSetup.md](arduinoSetup.md).
+
+---
+
+## 5. Using sample data
+
+This project includes a sample dataset (`example_data.json`) containing sensor readings.  
+It is provided so you can quickly test the application without having to connect a physical device or generate your own data.
+
+To load the data, run:
+
+```bash
+python manage.py loaddata example_data.json
+```
+
+---
+
+## 6. Gmail Alerts
+
+The system can send email alerts via Gmail using OAuth2 authentication.
+To enable this, you must configure a Google Cloud Console project and provide credentials to the application.
+
+Configure Sender Email
+
+Open `gmail_service.py` and update the following line:
+
+```python
+SENDER_EMAIL = "your_email@gmail.com"  # Replace with your Gmail address
+```
+
+Create a Google Cloud Console App
+
+1. Go to Google Cloud Console.
+2. Create a new project (or select an existing one).
+3. Navigate to APIs & Services → Credentials.
+4. Click Create Credentials → OAuth Client ID.
+5. Application type: Web application
+6. Add http://localhost in Authorized redirect URIs
+7. Download the resulting file → rename it to credentials.json.
+8. Place it into the credentials folder
+
+Run the provided script to authorize your gmail account
+
+```
+python get_token.py
+```
+
+A browser window will open asking you to log in and grant access.
+
+After granting access, a token.json file will be created inside the credentials/ folder.
+
+---
+
+

@@ -65,7 +65,7 @@ LOGGING = {
             'level': 'INFO',  # Change to 'INFO' if you want fewer logs
             'propagate': True,
         },
-        'arduSensorAPI': {  # Replace 'myapi' with your app's name
+        'arduSensorAPI': {  
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': False,

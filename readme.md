@@ -1,8 +1,22 @@
 # 🌐 ArduSensor Monitoring System
 
-Welcome to the **ArduSensor** project! This Django-based system is designed for monitoring IoT sensor data securely and flexibly, with both a user-friendly web interface and a professional REST API.
+Welcome to the **ArduSensor** project!  
+This is my undergraduate **thesis project** at **Harokopio University of Athens (Department of Informatics and Telematics)**.  
+
+ArduSensor is a condition monitoring system for a Data Center using Python/Django and microcontrollers. Providing a user-friendly UI, the ability to monitor data, view data historically, set thresholds for email alerts and export stored data on JSON and CSV files
+
+
+
+<p align="center">
+  <img src="/logo.png" alt="ArduSensor Logo" width="400"/>
+</p>
 
 ---
+
+👉 For full installation and configuration instructions, see [SETUP.md](SETUP.md).  
+👉 For microcontroller setup, see [arduinoSetup.md](arduinoSetup.md).  
+
+
 
 ## 🔍 Project Overview
 
@@ -23,8 +37,8 @@ Welcome to the **ArduSensor** project! This Django-based system is designed for 
 | :------------------------------- | :-------------------------------------------- | :----------------------------------------- |
 | Web Pages (settings, dashboard)  | `@login_required` (Django session)            | Browser-based access only.                 |
 | API Endpoints (JSON, CSV Export) | Token Authentication + Session Authentication | API clients and logged-in users supported. |
-
-* IoT devices authenticate using a custom **DeviceToken** system.
+| IoT Devices                      | Custom DeviceToken system                     | Token tied to each device ID.              |
+  
 * API clients authenticate using Django REST Framework **User Tokens**.
 
 ---
@@ -41,37 +55,93 @@ Welcome to the **ArduSensor** project! This Django-based system is designed for 
 ## 📂 Folder Structure
 
 ```bash
-myproject/
+arduSensor/
 ├── manage.py
-├── myproject/ (core project settings)
-└── myapi/ (main app)
-    ├── views.py
-    ├── models.py
-    ├── serializers.py
-    ├── forms.py
-    ├── templates/
-    └── management/commands/ (custom shell scripts)
+├── arduSensor/        # core project settings
+├── arduSensorAPI/     # main app (models, views, serializers, commands)
+│   ├── views.py
+│   ├── models.py
+│   ├── serializers.py
+│   ├── forms.py
+│   ├── templates/
+│   └── management/commands/   # custom shell commands
+├── requirements.txt
+├── example_data.json  # demo dataset
+├── SETUP.md           # detailed setup guide
+└── arduinoSetup.md    # Arduno / ESP setup guide
+
 ```
 
 ---
 
-## 📊 API Usage Instructions
+### 1. Access Web Page UI
 
-### 1. Obtain an API Token
+1. Start the server.
 
-* Create a Django user:
+```python manage.py runserver```
+Local access: http://127.0.0.1:8000
+By default, it will start at:
+Local access: http://127.0.0.1:8000 or http://localhost:8000
 
-```bash
-python manage.py createsuperuser
+Network access: http://<server-ip>:8000
+ (replace <server-ip> with your machine’s IP if you want to connect from another device on the same network).
+ 
+2. Login with your superuser or user credentials
+
+For admin-level management visit:
+
+http://<server-ip>:8000/admin/
+
+Once logged in, you can:
+1. Access the dashboard with the realtime sensor readings.
+2. Access the history tab to view the readings stored in the database.
+3. Manage alert thresholds through the settings tab.
+4. Export data through the settings tab.
+   
+---
+
+### 2. Post Data Without a Device (CLI)
+
+You can simulate the ESP by sending an HTTP POST to the same endpoint your microcontroller uses:
+
+POST /api/sensor_data_post/ with Content-Type: application/x-www-form-urlencoded and a DeviceToken in the Authorization header.
+
+0. Prerequisite
+   
+Create a DeviceToken
+
+```
+python manage.py createDeviceToken demo-esp
 ```
 
-* Generate a Token for the user:
+→ copy the printed token, e.g. 11111111-2222-3333-4444-555555555555
 
-```bash
-python manage.py createUserToken <username>
+2. Using curl (Linux/macOS)
+```
+curl -X POST "http://<server-ip>:8000/api/sensor_data_post/" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -H "Authorization: 11111111-2222-3333-4444-555555555555" \
+  --data "temperature=24.5&humidity=53.2&device_id=demo-esp"
 ```
 
-### 2. Export Sensor Data (JSON)
+2. Using curl (Windows PowerShell)
+
+```
+curl.exe -X POST "http://<server-ip>:8000/api/sensor_data_post/" `
+  -H "Content-Type: application/x-www-form-urlencoded" `
+  -H "Authorization: 11111111-2222-3333-4444-555555555555" `
+  --data "temperature=24.5&humidity=53.2&device_id=demo-esp"
+```
+
+3. Using Postman
+   1. Method: POST
+   2. URL: http://<server-ip>:8000/api/sensor_data_post/
+   3. Headers: Authorization: 11111111-2222-3333-4444-555555555555 Content-Type: application/x-www-form-urlencoded
+   4. Body: temperature=24.5&humidity=53.2&device_id=demo-esp
+  
+---
+
+### 3. Export Sensor Data (JSON)
 
 * URL: `http://localhost:8000/api/export-data-json/`
 * Method: `GET`
@@ -91,29 +161,21 @@ curl -H "Authorization: Token your_token_here" "http://localhost:8000/api/export
 
 ---
 
-## 📃 Web Dashboard Access
 
-* Login at: `http://localhost:8000/accounts/login/`
-* Manage thresholds, view sensor data history, export data manually.
+## Demo Dataset
 
+A demo dataset (example_data.json) is included for testing.
+See SETUP.md – Using Example Data
+ for instructions on how to load it.
+ 
 ---
 
-## 📅 Planned Improvements
+## Credits
 
-* Full HTTPS local development support
-* Automatic device token management endpoints
-* API documentation with ReDoc or Swagger
-* Scheduled automatic exports
+Project developed by: Konstantinos Gerokostas
 
----
+Institution: Harokopio University of Athens, Department of Informatics and Telematics
 
-## 💪 Credits
+Special Thanks: Django, Django REST Framework, and the open-source community.
 
-**Project developed by**: K. Gerokostas
-
-**Special Thanks**: Everyone contributing to Django, Django REST Framework, and the open-source community.
-
----
-
-# 🚀 Let's monitor smart, let's monitor safe!
-
+This repository contains the full source code of my undergraduate thesis project.
