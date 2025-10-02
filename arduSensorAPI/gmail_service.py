@@ -12,7 +12,7 @@ TOKEN_PATH = os.path.join(BASE_DIR, 'credentials', 'token.json')
 CREDENTIALS_PATH = os.path.join(BASE_DIR, 'credentials', 'credentials.json')  # optional for re-auth
 
 SCOPES = ['https://www.googleapis.com/auth/gmail.send']
-SENDER_EMAIL = 'sv1sjh@gmail.com'  # Replace with your Gmail address
+SENDER_EMAIL = 'youremailhere'  # Replace with your Gmail address
 
 
 def send_email_oauth2(subject, body, to_email):
