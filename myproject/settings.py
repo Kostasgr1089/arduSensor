@@ -73,14 +73,6 @@ LOGGING = {
     },
 }
 
-JAZZMIN_SETTINGS = {
-    "site_title": "arduSensor Admin",
-    "site_header": "Admin Dashboard",
-    "welcome_sign": "Welcome to My Admin Portal",
-    "copyright": "arduSensor",
-    "custom_css": None,  # Add custom CSS file if needed
-    "custom_js": None,  # Add custom JS file if needed
-}
 
 
 MIDDLEWARE = [
@@ -169,7 +161,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'sv1sjh@gmail.com'
+DEFAULT_FROM_EMAIL = 'YOUR-EMAIL'
 
 
 # Static files (CSS, JavaScript, Images)
